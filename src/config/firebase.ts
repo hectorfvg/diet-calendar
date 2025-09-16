@@ -11,13 +11,28 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Check if Firebase config is available
+export const isFirebaseConfigured = () => {
+  return !!(firebaseConfig.apiKey && firebaseConfig.projectId);
+};
 
-// Initialize Firestore
-export const db = getFirestore(app);
+// Initialize Firebase only if configured
+let app: any = null;
+let db: any = null;
+let auth: any = null;
 
-// Initialize Authentication
-export const auth = getAuth(app);
+if (isFirebaseConfigured()) {
+  try {
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    auth = getAuth(app);
+    console.log('🔥 Firebase initialized successfully');
+  } catch (error) {
+    console.error('❌ Firebase initialization failed:', error);
+  }
+} else {
+  console.warn('⚠️ Firebase not configured - using mock data');
+}
 
+export { db, auth };
 export default app;

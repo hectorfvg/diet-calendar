@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { CalendarData, Meal } from '../types';
 import { calendarService } from '../services/calendarService';
 import { mealService } from '../services/mealService';
+import { isFirebaseConfigured } from '../config/firebase';
+import { mockCalendarData } from '../utils/mockData';
 
 export const useFirebaseData = () => {
   const [calendarData, setCalendarData] = useState<CalendarData>({});
@@ -17,11 +19,19 @@ export const useFirebaseData = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await calendarService.getCalendarData();
-      setCalendarData(data);
+      
+      if (isFirebaseConfigured()) {
+        // Usar Firebase si està configurat
+        const data = await calendarService.getCalendarData();
+        setCalendarData(data);
+      } else {
+        // Usar dades mock si Firebase no està configurat
+        setCalendarData(mockCalendarData);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error carregant dades');
-      console.error('Error loading calendar data:', err);
+      console.error('Error loading calendar data from Firebase, falling back to mock data:', err);
+      setCalendarData(mockCalendarData);
+      setError(null); // No mostrar error si podem usar mock data
     } finally {
       setLoading(false);
     }
@@ -33,22 +43,28 @@ export const useFirebaseData = () => {
     meal: Meal | null
   ) => {
     try {
-      if (meal) {
-        // Si l'àpat té un ID que comença amb 's' (àpat migrat), crear un nou àpat
-        if (meal.id.startsWith('s')) {
-          const { id, ...mealData } = meal;
-          const newMealId = await mealService.createMeal(mealData);
-          meal = { ...mealData, id: newMealId };
-        } else {
-          // Si és un àpat existent, actualitzar-lo
-          await mealService.updateMeal(meal.id, meal);
+      if (isFirebaseConfigured()) {
+        // Usar Firebase si està configurat
+        if (meal) {
+          // Si l'àpat té un ID que comença amb 's' (àpat migrat), crear un nou àpat
+          if (meal.id.startsWith('s')) {
+            const { id, ...mealData } = meal;
+            const newMealId = await mealService.createMeal(mealData);
+            meal = { ...mealData, id: newMealId };
+          } else {
+            // Si és un àpat existent, actualitzar-lo
+            await mealService.updateMeal(meal.id, meal);
+          }
         }
-      }
 
-      // Actualitzar Firebase calendari
-      await calendarService.updateMealInDay(date, mealType, meal);
+        // Actualitzar Firebase calendari
+        await calendarService.updateMealInDay(date, mealType, meal);
+      } else {
+        // Mode mock: només actualitzar localment
+        console.warn('⚠️ Firebase not configured - changes will not persist');
+      }
       
-      // Actualitzar estat local
+      // Actualitzar estat local (sempre)
       setCalendarData(prev => ({
         ...prev,
         [date]: {
