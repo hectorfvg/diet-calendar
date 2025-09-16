@@ -6,15 +6,22 @@ import CalendarGrid from './components/CalendarGrid';
 import DayDetailOverlay from './components/DayDetailOverlay';
 import ShoppingList from './components/ShoppingList';
 import { getCalendarDays } from './utils/dateUtils';
-import { mockCalendarData } from './utils/mockData';
 import { CalendarData, Meal, TabType } from './types';
 import { addMonths, subMonths } from 'date-fns';
+import { useFirebaseData } from './hooks/useFirebaseData';
 
 function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [calendarData, setCalendarData] = useState<CalendarData>(mockCalendarData);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('calendar');
+  
+  const { 
+    calendarData, 
+    loading, 
+    error, 
+    updateMealInDay,
+    createMeal 
+  } = useFirebaseData();
 
   const days = getCalendarDays(currentDate);
 
@@ -34,25 +41,15 @@ function App() {
     setSelectedDate(null);
   };
 
-  const handleSaveMeal = (mealType: 'breakfast' | 'lunch' | 'dinner', meal: Meal) => {
+  const handleSaveMeal = async (mealType: 'breakfast' | 'lunch' | 'dinner', meal: Meal) => {
     if (!selectedDate) return;
 
-    setCalendarData(prev => {
-      const updatedData = { ...prev };
-      if (!updatedData[selectedDate]) {
-        updatedData[selectedDate] = {
-          date: selectedDate,
-          breakfast: null,
-          lunch: null,
-          dinner: null,
-        };
-      }
-      updatedData[selectedDate] = {
-        ...updatedData[selectedDate],
-        [mealType]: meal,
-      };
-      return updatedData;
-    });
+    try {
+      await updateMealInDay(selectedDate, mealType, meal);
+    } catch (error) {
+      console.error('Error saving meal:', error);
+      // Aquí podries mostrar un missatge d'error a l'usuari
+    }
   };
 
   const handleTabChange = (tab: TabType) => {
@@ -63,6 +60,26 @@ function App() {
   const handleMonthChange = (date: Date) => {
     setCurrentDate(date);
   };
+
+  if (loading) {
+    return (
+      <div className="App">
+        <div className="app-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+          <div>⏳ Carregant dades del calendari...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="App">
+        <div className="app-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+          <div style={{ color: 'red' }}>❌ Error: {error}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="App">
