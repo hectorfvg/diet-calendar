@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/diet-calendar/static/css/main.2bde02e5.css",
-    "main.js": "/diet-calendar/static/js/main.de0bb4be.js",
+    "main.js": "/diet-calendar/static/js/main.0daa6aba.js",
     "static/js/453.585da247.chunk.js": "/diet-calendar/static/js/453.585da247.chunk.js",
     "index.html": "/diet-calendar/index.html",
     "main.2bde02e5.css.map": "/diet-calendar/static/css/main.2bde02e5.css.map",
-    "main.de0bb4be.js.map": "/diet-calendar/static/js/main.de0bb4be.js.map",
+    "main.0daa6aba.js.map": "/diet-calendar/static/js/main.0daa6aba.js.map",
     "453.585da247.chunk.js.map": "/diet-calendar/static/js/453.585da247.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2bde02e5.css",
-    "static/js/main.de0bb4be.js"
+    "static/js/main.0daa6aba.js"
   ]
 }
