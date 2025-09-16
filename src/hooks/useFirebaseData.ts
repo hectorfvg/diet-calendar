@@ -33,21 +33,15 @@ export const useFirebaseData = () => {
     meal: Meal | null
   ) => {
     try {
-      console.log('🔄 Updating meal in day:', { date, mealType, meal });
-      
       if (meal) {
         // Si l'àpat té un ID que comença amb 's' (àpat migrat), crear un nou àpat
         if (meal.id.startsWith('s')) {
-          console.log('🆕 Creating new meal from migrated data');
           const { id, ...mealData } = meal;
           const newMealId = await mealService.createMeal(mealData);
           meal = { ...mealData, id: newMealId };
-          console.log('✅ New meal created with ID:', newMealId);
         } else {
           // Si és un àpat existent, actualitzar-lo
-          console.log('📝 Updating existing meal:', meal.id);
           await mealService.updateMeal(meal.id, meal);
-          console.log('✅ Meal updated successfully');
         }
       }
 

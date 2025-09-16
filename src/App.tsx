@@ -5,7 +5,6 @@ import CalendarHeader from './components/CalendarHeader';
 import CalendarGrid from './components/CalendarGrid';
 import DayDetailOverlay from './components/DayDetailOverlay';
 import ShoppingList from './components/ShoppingList';
-import FirebaseDebug from './components/FirebaseDebug';
 import { getCalendarDays } from './utils/dateUtils';
 import { CalendarData, Meal, TabType } from './types';
 import { addMonths, subMonths } from 'date-fns';
@@ -84,7 +83,6 @@ function App() {
 
   return (
     <div className="App">
-      <FirebaseDebug />
       <div className="app-container">
         <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
         
