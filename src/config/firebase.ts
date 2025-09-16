@@ -2,7 +2,23 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
-const firebaseConfig = {
+// Check if we're in production (GitHub Pages)
+const isProduction = process.env.NODE_ENV === 'production' && 
+                    typeof window !== 'undefined' && 
+                    window.location.hostname === 'hectorfvg.github.io';
+
+// Production config (GitHub Pages)
+const prodConfig = {
+  apiKey: "AIzaSyD9ScwJOCLWWlm_VHvN22SXO2OcMI79cJ8",
+  authDomain: "diet-calendar-609d1.firebaseapp.com",
+  projectId: "diet-calendar-609d1",
+  storageBucket: "diet-calendar-609d1.firebasestorage.app",
+  messagingSenderId: "153352844845",
+  appId: "1:153352844845:web:23e86e3371b4f006c7eaa4"
+};
+
+// Development config (from environment variables)
+const devConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
@@ -10,6 +26,10 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
+
+const firebaseConfig = isProduction ? prodConfig : devConfig;
+
+console.log(`🔧 Environment: ${isProduction ? 'Production (GitHub Pages)' : 'Development'}`);
 
 // Check if Firebase config is available
 export const isFirebaseConfigured = () => {
