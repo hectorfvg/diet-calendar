@@ -1,0 +1,76 @@
+{
+  "llistaCompra": {
+    "interval": "2025-09-27 → 2025-10-03",
+    "persones": { "esmorzars": 2, "platsPrincipals": 4 },
+    "categories": {
+      "proteines_animals": [
+        "Pit de pollastre — 1.4 kg",
+        "Salmó fresc (lloms) — 650 g",
+        "Bacallà dessalat (per esqueixada) — 600 g",
+        "Gall dindi a llesques — 480 g",
+        "Formatge feta — 160 g",
+        "Parmesà ratllat — 60 g",
+        "Iogurt grec natural — 1.0 kg"
+      ],
+      "proteines_vegetals_i_llegums": [
+        "Tofu fumat — 500 g",
+        "Cigrons cuits (escorreguts) — 800 g",
+        "Mongetes blanques cuites (escorregudes) — 800 g",
+        "Llenties cuites (escorregudes) — 800 g"
+      ],
+      "cereals_i_grans": [
+        "Civada en flocs — 480 g",
+        "Beguda vegetal o llet — 1.2 L",
+        "Pasta integral — 400 g",
+        "Arròs (blanc o integral) — 660 g",
+        "Quinoa — 300 g",
+        "Pa integral (≈12 llesques) — 1 peça"
+      ],
+      "verdures_i_ensalades": [
+        "Espinacs frescos — 250 g",
+        "Bròquil — 500 g",
+        "Moniatos — 900 g",
+        "Carbassó — 2 unitats",
+        "Pebrots barrejats — 6 unitats",
+        "Ceba groga — 3 unitats",
+        "Ceba morada — 2 unitats",
+        "Ceba tendra — 2 unitats",
+        "Pastanagues — 5 unitats",
+        "Cogombre — 1 unitat",
+        "Tomàquets cherry — 300 g",
+        "Tomàquets madurs — 6 unitats"
+      ],
+      "fruites": [
+        "Alvocats — 5 unitats",
+        "Cítrics (llimona/llima) — 3 unitats",
+        "Fruita variada per esmorzars — 1.0 kg"
+      ],
+      "fruits_secs_i_llavors": [
+        "Llavors de chia — 80 g",
+        "Pinyons — 40 g"
+      ],
+      "conserves_i_salses": [
+        "Tomàquet triturat/passata — 400 g",
+        "Llet de coco — 400 ml",
+        "Olives negres — 80 g",
+        "Vinagre de Xerès — 1 ampolla (≈250 ml)"
+      ],
+      "espècies_i_condiments": [
+        "Curry suau — 1 pot",
+        "Cúrcuma — 1 pot",
+        "Comí mòlt — 1 pot",
+        "All en pols — 1 pot",
+        "All fresc — 3 grans",
+        "Oli d'oliva verge extra — 1 ampolla",
+        "Sal i pebre — al gust"
+      ],
+      "herbes_fresques": [
+        "Alfàbrega fresca — 1 manat"
+      ]
+    },
+    "notes": [
+      "Per a tàpers amb amanides/bowls, porta l'amaniment a part (oli + vinagre/cítric).",
+      "Si ja tens part d'aquests bàsics (oli, sal, espècies), marca'ls com a no necessaris."
+    ]
+  }
+}
