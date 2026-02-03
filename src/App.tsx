@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import './App.css';
+import './Nordic.css';
 import Navigation from './components/Navigation';
 import CalendarHeader from './components/CalendarHeader';
 import CalendarGrid from './components/CalendarGrid';
-import DayDetailOverlay from './components/DayDetailOverlay';
-import ShoppingList from './components/ShoppingList';
+import DayDetailScreen from './components/DayDetailScreen';
+import FirebaseShoppingList from './components/FirebaseShoppingList';
 import { getCalendarDays } from './utils/dateUtils';
 import { CalendarData, Meal, TabType } from './types';
 import { addMonths, subMonths } from 'date-fns';
@@ -13,14 +13,16 @@ import { useFirebaseData } from './hooks/useFirebaseData';
 function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [showDayDetail, setShowDayDetail] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('calendar');
   
-  const { 
-    calendarData, 
-    loading, 
-    error, 
+  const {
+    calendarData,
+    loading,
+    error,
     updateMealInDay,
-    createMeal 
+    createMeal,
+    swapMealsBetweenDays
   } = useFirebaseData();
 
   const days = getCalendarDays(currentDate);
@@ -35,26 +37,19 @@ function App() {
 
   const handleDayClick = (date: string) => {
     setSelectedDate(date);
+    setShowDayDetail(true);
   };
 
-  const handleCloseOverlay = () => {
+  const handleBackToCalendar = () => {
     setSelectedDate(null);
+    setShowDayDetail(false);
   };
 
-  const handleSaveMeal = async (mealType: 'breakfast' | 'lunch' | 'dinner', meal: Meal) => {
-    if (!selectedDate) return;
-
-    try {
-      await updateMealInDay(selectedDate, mealType, meal);
-    } catch (error) {
-      console.error('Error saving meal:', error);
-      // Aquí podries mostrar un missatge d'error a l'usuari
-    }
-  };
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
     setSelectedDate(null);
+    setShowDayDetail(false);
   };
 
   const handleMonthChange = (date: Date) => {
@@ -87,33 +82,33 @@ function App() {
         <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
         
         {activeTab === 'calendar' ? (
-          <div className="calendar-container">
-            <CalendarHeader
-              currentDate={currentDate}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-            />
-            <CalendarGrid
-              days={days}
-              currentMonth={currentDate}
+          showDayDetail && selectedDate ? (
+            <DayDetailScreen
+              date={selectedDate}
+              dayData={calendarData[selectedDate] || null}
               calendarData={calendarData}
-              onDayClick={handleDayClick}
+              onBack={handleBackToCalendar}
+              onCreateMeal={createMeal}
+              onUpdateMealInDay={updateMealInDay}
             />
-            {selectedDate && (
-              <DayDetailOverlay
-                date={selectedDate}
-                dayMeals={calendarData[selectedDate] || null}
-                onClose={handleCloseOverlay}
-                onSaveMeal={handleSaveMeal}
+          ) : (
+            <div className="calendar-container">
+              <CalendarHeader
+                currentDate={currentDate}
+                onPrevMonth={handlePrevMonth}
+                onNextMonth={handleNextMonth}
               />
-            )}
-          </div>
+              <CalendarGrid
+                days={days}
+                currentMonth={currentDate}
+                calendarData={calendarData}
+                onDayClick={handleDayClick}
+                onMealMove={swapMealsBetweenDays}
+              />
+            </div>
+          )
         ) : (
-          <ShoppingList
-            calendarData={calendarData}
-            currentDate={currentDate}
-            onMonthChange={handleMonthChange}
-          />
+          <FirebaseShoppingList />
         )}
       </div>
     </div>
