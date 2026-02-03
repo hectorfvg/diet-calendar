@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { formatDisplayDate } from '../utils/dateUtils';
 import { useIngredientTotals } from '../hooks/useIngredientTotals';
 import { CalendarData, Meal, Ingredient } from '../types';
@@ -50,12 +50,37 @@ const DayDetailScreen: React.FC<DayDetailScreenProps> = ({
     }
   };
 
-  const renderMealSection = (meal: any, title: string, color: string) => {
+  const handleDeleteMeal = async (mealType: 'breakfast' | 'lunch' | 'dinner', mealTitle: string) => {
+    const confirmed = window.confirm(
+      `Estàs segur que vols eliminar l'àpat "${mealTitle}"?\n\nAquesta acció no es pot desfer.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await onUpdateMealInDay(date, mealType, null);
+    } catch (error) {
+      console.error('Error eliminant àpat:', error);
+      alert('Error eliminant l\'àpat. Torna-ho a intentar.');
+    }
+  };
+
+  const renderMealSection = (meal: any, title: string, color: string, mealType: 'breakfast' | 'lunch' | 'dinner') => {
     if (!meal) return null;
 
     return (
       <div className={`meal-section ${color}`}>
-        <h3 className="meal-title">{title}</h3>
+        <div className="meal-title-container">
+          <h3 className="meal-title">{title}</h3>
+          <button
+            onClick={() => handleDeleteMeal(mealType, meal.titol || meal.name || 'aquest àpat')}
+            className="delete-meal-btn"
+            title="Eliminar àpat"
+          >
+            <Trash2 size={18} />
+            Eliminar
+          </button>
+        </div>
         <div className="meal-content">
           <h4 className="meal-name">{meal.titol || meal.name || 'Sense nom'}</h4>
 
@@ -134,8 +159,8 @@ const DayDetailScreen: React.FC<DayDetailScreenProps> = ({
       </div>
 
       <div className="day-detail-content">
-        {renderMealSection(mainMeal, 'Àpat Principal', 'main')}
-        {renderMealSection(dayData?.breakfast, 'Esmorzar', 'breakfast')}
+        {renderMealSection(mainMeal, 'Àpat Principal', 'main', 'lunch')}
+        {renderMealSection(dayData?.breakfast, 'Esmorzar', 'breakfast', 'breakfast')}
 
         {!dayData?.breakfast && !mainMeal && (
           <div className="empty-day">

@@ -383,14 +383,41 @@ body {
   border-left: 3px solid #10b981;
 }
 
-.meal-title {
-  margin: 0;
+.meal-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 20px 24px;
   background: #fafbfc;
   border-bottom: 1px solid #f1f5f9;
+}
+
+.meal-title {
+  margin: 0;
   font-size: 18px;
   font-weight: 600;
   color: #1e293b;
+}
+
+.delete-meal-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #dc2626;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-meal-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  transform: translateY(-1px);
 }
 
 .meal-content {
