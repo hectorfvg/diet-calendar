@@ -4,6 +4,7 @@ import { formatDisplayDate } from '../utils/dateUtils';
 import { useIngredientTotals } from '../hooks/useIngredientTotals';
 import { CalendarData, Meal, Ingredient } from '../types';
 import NewMealModal from './NewMealModal';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 interface DayDetailScreenProps {
   date: string;
@@ -25,6 +26,10 @@ const DayDetailScreen: React.FC<DayDetailScreenProps> = ({
   const dateObj = new Date(date);
   const { getIngredientTotal, isRepeatedIngredient } = useIngredientTotals(calendarData);
   const [showNewMealModal, setShowNewMealModal] = useState(false);
+  const [mealToDelete, setMealToDelete] = useState<{
+    type: 'breakfast' | 'lunch' | 'dinner';
+    title: string;
+  } | null>(null);
 
   // Comprovar si el dia té àpats assignats
   const hasAnyMeal = dayData?.breakfast || dayData?.lunch || dayData?.dinner;
@@ -50,19 +55,25 @@ const DayDetailScreen: React.FC<DayDetailScreenProps> = ({
     }
   };
 
-  const handleDeleteMeal = async (mealType: 'breakfast' | 'lunch' | 'dinner', mealTitle: string) => {
-    const confirmed = window.confirm(
-      `Estàs segur que vols eliminar l'àpat "${mealTitle}"?\n\nAquesta acció no es pot desfer.`
-    );
+  const handleDeleteMeal = (mealType: 'breakfast' | 'lunch' | 'dinner', mealTitle: string) => {
+    setMealToDelete({ type: mealType, title: mealTitle });
+  };
 
-    if (!confirmed) return;
+  const handleConfirmDelete = async () => {
+    if (!mealToDelete) return;
 
     try {
-      await onUpdateMealInDay(date, mealType, null);
+      await onUpdateMealInDay(date, mealToDelete.type, null);
+      setMealToDelete(null);
     } catch (error) {
       console.error('Error eliminant àpat:', error);
       alert('Error eliminant l\'àpat. Torna-ho a intentar.');
+      setMealToDelete(null);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setMealToDelete(null);
   };
 
   const renderMealSection = (meal: any, title: string, color: string, mealType: 'breakfast' | 'lunch' | 'dinner') => {
@@ -174,6 +185,14 @@ const DayDetailScreen: React.FC<DayDetailScreenProps> = ({
           date={date}
           onSave={handleSaveNewMeal}
           onClose={() => setShowNewMealModal(false)}
+        />
+      )}
+
+      {mealToDelete && (
+        <ConfirmDeleteModal
+          mealTitle={mealToDelete.title}
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
         />
       )}
     </div>

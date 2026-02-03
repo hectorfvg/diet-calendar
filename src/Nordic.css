@@ -1002,6 +1002,94 @@ body {
   cursor: not-allowed;
 }
 
+/* Confirm Delete Modal */
+.confirm-delete-modal {
+  max-width: 480px;
+  padding: 0;
+}
+
+.confirm-delete-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px 16px 32px;
+}
+
+.confirm-delete-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #fef3c7;
+  border-radius: 12px;
+  color: #f59e0b;
+}
+
+.confirm-delete-body {
+  padding: 0 32px 24px 32px;
+}
+
+.confirm-delete-body h2 {
+  margin: 16px 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.confirm-delete-message {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.confirm-delete-message strong {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.confirm-delete-warning {
+  margin: 0;
+  font-size: 14px;
+  color: #64748b;
+  font-style: italic;
+}
+
+.confirm-delete-actions {
+  display: flex;
+  gap: 12px;
+  padding: 24px 32px;
+  border-top: 1px solid #f1f5f9;
+  justify-content: flex-end;
+}
+
+.confirm-delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #dc2626;
+  color: white;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+}
+
+.confirm-delete-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.confirm-delete-btn:active {
+  transform: translateY(0);
+}
+
 /* Responsive Modal */
 @media (max-width: 768px) {
   .modal-overlay {
@@ -1043,5 +1131,34 @@ body {
   .new-meal-cta {
     padding: 10px 16px;
     font-size: 14px;
+  }
+
+  .confirm-delete-modal {
+    max-width: 100%;
+    border-radius: 16px;
+    margin: 16px;
+  }
+
+  .confirm-delete-header {
+    padding: 20px 24px 12px 24px;
+  }
+
+  .confirm-delete-body {
+    padding: 0 24px 20px 24px;
+  }
+
+  .confirm-delete-body h2 {
+    font-size: 18px;
+  }
+
+  .confirm-delete-actions {
+    padding: 20px 24px;
+    flex-direction: column-reverse;
+  }
+
+  .confirm-delete-btn,
+  .confirm-delete-actions .cancel-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
